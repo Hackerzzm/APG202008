@@ -1,0 +1,101 @@
+apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+version = "0.3" //aar的版本号
+android {
+  compileSdkVersion 30
+  buildToolsVersion "30.0.1"
+
+  defaultConfig {
+    minSdkVersion 21
+    targetSdkVersion 30
+    versionCode 1
+    versionName "1.0"
+
+    testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    consumerProguardFiles "consumer-rules.pro"
+  }
+
+  buildTypes {
+    release {
+      minifyEnabled true
+      proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+    }
+  }
+}
+
+dependencies {
+  implementation fileTree(dir: "libs", include: ["*.jar"])
+  implementation 'androidx.appcompat:appcompat:1.1.0'
+  testImplementation 'junit:junit:4.13'
+  androidTestImplementation 'androidx.test.ext:junit:1.1.1'
+  androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+  implementation files('libs/zxing.jar')
+}
+
+def siteUrl = 'https://github.com/Hackerzzm/APG202008.git' // 项目主页
+def gitUrl = 'https://github.com/Hackerzzm/APG202008.git' // 项目的git地址
+def module_name = 'com.smt.appbase' // 项目的名称
+group = 'shsmt' // 所在组
+install {
+  repositories.mavenInstaller {
+    // This generates POM.xml with proper parameters
+    pom {
+      project {
+        packaging 'aar'
+        name 'appbase' // 名称
+        url siteUrl
+        licenses {
+          license {
+            name 'The Apache Software License, Version 2.0' // 开源协议名称
+            url 'http://www.apache.org/licenses/LICENSE-2.0.txt' // 协议地址
+          }
+        }
+        developers {
+          developer {
+            id 'hackerzzm' // 账号
+            name 'hackerzzm' // 名称
+            email 'zzmhacker@gmail.com' // 邮箱地址
+          }
+        }
+        scm {
+          connection gitUrl
+          developerConnection gitUrl
+          url siteUrl
+        }
+      }
+    }
+  }
+}
+task sourcesJar(type: Jar) {
+  from android.sourceSets.main.java.srcDirs
+  classifier = 'sources'
+}
+task javadoc(type: Javadoc) {
+  source = android.sourceSets.main.java.srcDirs
+  classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+}
+task javadocJar(type: Jar, dependsOn: javadoc) {
+  classifier = 'javadoc'
+  from javadoc.destinationDir
+}
+artifacts {
+  archives sourcesJar
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+  // 读取配置文件中的用户名和key
+  user = properties.getProperty("bintray.user")
+  key = properties.getProperty("bintray.apikey")
+  configurations = ['archives']
+  pkg {
+    repo = "maven" // 你在bintray上创建的库的名称
+    name = module_name // 在jcenter中的项目名称
+    websiteUrl = siteUrl
+    vcsUrl = gitUrl
+    licenses = ["Apache-2.0"]
+    publish = true
+  }
+}
+//Terminal gradlew build、gradlew bintrayUpload
