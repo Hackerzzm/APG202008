@@ -123,6 +123,9 @@ public class QRCodeCheckUtil {
       }
       cangWeiMa.setStation("");
       cangWeiMa.setKw(cwm.substring(1));
+      if(cwm.substring(1).length()>6){
+        return null;
+      }
       return cangWeiMa;
     } catch (Exception e) {
       e.printStackTrace();
