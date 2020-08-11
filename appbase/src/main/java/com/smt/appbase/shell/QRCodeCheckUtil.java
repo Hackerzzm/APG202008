@@ -16,7 +16,7 @@ public class QRCodeCheckUtil {
       com.smt.appbase.util.XianPinPiao xianPinPiao = new com.smt.appbase.util.XianPinPiao();
       xianPinPiao.setGd(xpp.substring(0, 12).trim());
       xianPinPiao.setPf(xpp.substring(12, 21).trim());
-      xianPinPiao.setGctf(xpp.substring(21, 33).trim());
+      xianPinPiao.setGctf(rtrim(xpp.substring(21, 33)));
       xianPinPiao.setSl(Float.parseFloat(xpp.substring(33, 44)));
       xianPinPiao.setXrs(Float.parseFloat(xpp.substring(33, 44)));
       xianPinPiao.setXpp(xpp.substring(44, 57).trim());
@@ -28,6 +28,17 @@ public class QRCodeCheckUtil {
       e.printStackTrace();
       return null;
     }
+  }
+
+  //public static void main(String args[]) {
+  //  String str="Abc  ";
+  //  String strRTrim=rtrim(str);
+  //  System.out.println(strRTrim);
+  //}
+
+  public static String rtrim(String value){
+    if(value==null) return null;
+    return value.replaceAll("\\s+$",""); // 去掉2113右侧5261末尾4102的空格1653
   }
 
   public static com.smt.appbase.util.HeGePiao checkHGP(String hgp) {
