@@ -68,7 +68,7 @@ public class QRCodeCheckUtil {
     ThirtyBirthday.happyBirthday();
     cwm = cwm.trim();
     try {
-      if (cwm.length() < 2) {
+      if (cwm.length() !=7 ) {
         return null;
       }
       com.smt.appbase.util.CangWeiMa cangWeiMa = new com.smt.appbase.util.CangWeiMa();
